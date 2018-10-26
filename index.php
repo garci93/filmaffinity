@@ -7,6 +7,8 @@
     <body>
         <?php
         $pdo = new PDO('pgsql:host=localhost;dbname=fa', 'fa', 'fa');
+        $numFilas = $pdo->exec("INSERT INTO generos (genero)
+                                VALUES ('Costumbrismo')");
         $st = $pdo->query('SELECT * FROM generos');
         ?>
         <table border="1" style="margin:auto">
@@ -15,12 +17,6 @@
                 <th>Género</th>
             </thead>
             <tbody>
-                <!-- <?php while ($fila = $st->fetch()): ?>
-                    <tr>
-                        <td><?= $fila['id'] ?></td>
-                        <td><?= $fila['genero'] ?></td>
-                    </tr>
-                <?php endwhile ?> -->
                 <?php foreach ($st as $fila): ?>
                     <tr>
                         <td><?= $fila['id'] ?></td>
