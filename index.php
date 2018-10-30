@@ -6,10 +6,29 @@
     </head>
     <body>
         <?php
+        require 'auxiliar.php';
+
+        $pdo = conectar();
+
+        if (isset($_POST['id'])) {
+            $id = $_POST['id'];
+            $pdo->beginTransaction();
+            $pdo->exec('LOCK TABLE peliculas IN SHARE MODE');
+            if (!buscarPelicula($pdo, $id)) { ?>
+                <h3>La película no existe.</h3>
+            <?php
+            } else {
+                $st = $pdo->prepare('DELETE FROM peliculas WHERE id = :id');
+                $st->execute([':id' => $id]); ?>
+                <h3>Película borrada correctamente.</h3>
+            <?php
+            }
+            $pdo->commit();
+        }
+
         $buscarTitulo = isset($_GET['buscarTitulo'])
                       ? trim($_GET['buscarTitulo'])
                       : '';
-        $pdo = new PDO('pgsql:host=localhost;dbname=fa', 'fa', 'fa');
         $st = $pdo->prepare('SELECT p.*, genero
                                FROM peliculas p
                                JOIN generos g
@@ -36,6 +55,7 @@
                     <th>Sinopsis</th>
                     <th>Duración</th>
                     <th>Género</th>
+                    <th>Acciones</th>
                 </thead>
                 <tbody>
                     <?php foreach ($st as $fila): ?>
@@ -45,6 +65,11 @@
                             <td><?= $fila['sinopsis'] ?></td>
                             <td><?= $fila['duracion'] ?></td>
                             <td><?= $fila['genero'] ?></td>
+                            <td>
+                                <a href="confirm_borrado.php?id=<?= $fila['id'] ?>">
+                                    Borrar
+                                </a>
+                            </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
