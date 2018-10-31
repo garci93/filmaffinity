@@ -12,34 +12,34 @@
         <div class="container">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Insertar una nueva película ...</h3>
+                    <h3 class="panel-title">Insertar una nueva película...</h3>
                 </div>
-            </div>
-            <div class="panel-body">
-                <form action="#" method="post">
-                    <div class="form-group">
-                        <label for="titulo">Título</label>
-                        <label type="text" name="titulo" class="form-control"></label>
-                    </div>
-                    <div class="form-group">
-                        <label for="anyo">Año</label>
-                        <label type="text" name="anyo" class="form-control"></label>
-                    </div>
-                    <div class="form-group">
-                        <label for="duracion">Duración</label>
-                        <label type="text" name="duracion" class="form-control"></label>
-                    </div>
-                    <div class="form-group">
-                        <label for="sinopsis">Sinopsis</label>
-                        <textarea name="sinopsis" rows="8" cols="80" class="form-control"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="genero_id">Género</label>
-                        <label type="text" name="genero_id" class="form-control"></label>
-                    </div>
-                    <input type="submit" value="Insertar" class="btn btn-success">
-                    <a href="index.php" class="btn btn-info">Volver</a>
-                </form>
+                <div class="panel-body">
+                    <form action="#" method="post">
+                        <div class="form-group">
+                            <label for="titulo">Título</label>
+                            <input id="titulo" type="text" name="titulo" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="anyo">Año</label>
+                            <input id="anyo" type="text" name="anyo" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="sinopsis">Sinopsis</label>
+                            <textarea id="sinopsis" name="sinopsis" rows="8" cols="80" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="duracion">Duración</label>
+                            <input id="duracion" type="text" name="duracion" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="genero_id">Género</label>
+                            <input id="genero_id" type="text" name="genero_id" class="form-control">
+                        </div>
+                        <input type="submit" value="Insertar" class="btn btn-success">
+                        <a href="index.php" class="btn btn-info">Volver</a>
+                    </form>
+                </div>
             </div>
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
