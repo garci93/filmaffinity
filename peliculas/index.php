@@ -14,8 +14,10 @@
         <div class="container">
             <div class="row">
                 <?php
-                require 'auxiliar.php';
+                require '../comunes/auxiliar.php';
+
                 $pdo = conectar();
+
                 if (isset($_POST['id'])) {
                     $id = $_POST['id'];
                     $pdo->beginTransaction();
@@ -31,6 +33,7 @@
                     }
                     $pdo->commit();
                 }
+
                 $buscarTitulo = isset($_GET['buscarTitulo'])
                 ? trim($_GET['buscarTitulo'])
                 : '';
@@ -38,7 +41,8 @@
                                        FROM peliculas p
                                        JOIN generos g
                                          ON genero_id = g.id
-                                      WHERE position(lower(:titulo) in lower(titulo)) != 0');
+                                      WHERE position(lower(:titulo) in lower(titulo)) != 0
+                                   ORDER BY id');
                 $st->execute([':titulo' => $buscarTitulo]);
                 ?>
             </div>
@@ -73,15 +77,19 @@
                         <tbody>
                             <?php foreach ($st as $fila): ?>
                                 <tr>
-                                    <td><?= $fila['titulo'] ?></td>
-                                    <td><?= $fila['anyo'] ?></td>
-                                    <td><?= $fila['sinopsis'] ?></td>
-                                    <td><?= $fila['duracion'] ?></td>
-                                    <td><?= $fila['genero'] ?></td>
+                                    <td><?= h($fila['titulo']) ?></td>
+                                    <td><?= h($fila['anyo']) ?></td>
+                                    <td><?= h($fila['sinopsis']) ?></td>
+                                    <td><?= h($fila['duracion']) ?></td>
+                                    <td><?= h($fila['genero']) ?></td>
                                     <td>
                                         <a href="confirm_borrado.php?id=<?= $fila['id'] ?>"
                                            class="btn btn-xs btn-danger">
                                             Borrar
+                                        </a>
+                                        <a href="modificar.php?id=<?= $fila['id'] ?>"
+                                           class="btn btn-xs btn-info">
+                                            Modificar
                                         </a>
                                     </td>
                                 </tr>
