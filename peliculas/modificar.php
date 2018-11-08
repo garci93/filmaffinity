@@ -1,3 +1,4 @@
+<?php session_start() ?>
 <!DOCTYPE html>
 <html lang="es" dir="ltr">
     <head>
@@ -11,17 +12,11 @@
         <?php
         require '../comunes/auxiliar.php';
 
-        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        if ($id === null || $id === false) {
-            header('Location: index.php');
-        }
-        $pdo = conectar();
-        $fila = buscarPelicula($pdo, $id);
-        if ($fila === false) {
-            header('Location: index.php');
-        }
         try {
             $error = [];
+            $id = comprobarId();
+            $pdo = conectar();
+            $fila = comprobarPelicula($pdo, $id);
             comprobarParametros(PAR);
             $valores = array_map('trim', $_POST);
             $flt['titulo'] = comprobarTitulo($error);
@@ -31,6 +26,7 @@
             $flt['genero_id'] = comprobarGeneroId($pdo, $error);
             comprobarErrores($error);
             modificarPelicula($pdo, $flt, $id);
+            $_SESSION['mensaje'] = 'Película modificada correctamente.';
             header('Location: index.php');
         } catch (EmptyParamException|ValidationException $e) {
             // No hago nada
@@ -39,7 +35,7 @@
         }
         ?>
         <div class="container">
-            <?php mostrarFormulario($fila, $error, 'Modificar') ?>
+            <?php mostrarFormulario($fila, $error, $pdo, 'Modificar') ?>
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>

@@ -143,9 +143,11 @@ function mensajeError($key, $error)
     }
 }
 
-function mostrarFormulario($valores, $error, $accion)
+function mostrarFormulario($valores, $error, $pdo, $accion)
 {
     extract($valores);
+    $st = $pdo->query('SELECT * FROM generos');
+    $generos = $st->fetchAll();
     ?>
     <br>
     <div class="panel panel-primary">
@@ -157,13 +159,13 @@ function mostrarFormulario($valores, $error, $accion)
                 <div class="form-group <?= hasError('titulo', $error) ?>">
                     <label for="titulo" class="control-label">Título</label>
                     <input id="titulo" type="text" name="titulo"
-                           class="form-control" value="<?= $titulo ?>">
+                           class="form-control" value="<?= h($titulo) ?>">
                     <?php mensajeError('titulo', $error) ?>
                 </div>
                 <div class="form-group <?= hasError('anyo', $error) ?>">
                     <label for="anyo" class="control-label">Año</label>
                     <input id="anyo" type="text" name="anyo"
-                           class="form-control" value="<?= $anyo ?>">
+                           class="form-control" value="<?= h($anyo) ?>">
                     <?php mensajeError('anyo', $error) ?>
                 </div>
                 <div class="form-group">
@@ -172,20 +174,24 @@ function mostrarFormulario($valores, $error, $accion)
                               name="sinopsis"
                               rows="8"
                               cols="80"
-                              class="form-control"><?= $sinopsis ?></textarea>
+                              class="form-control"><?= h($sinopsis) ?></textarea>
                 </div>
                 <div class="form-group <?= hasError('duracion', $error) ?>">
                     <label for="duracion" class="control-label">Duración</label>
                     <input id="duracion" type="text" name="duracion"
                            class="form-control"
-                           value="<?= $duracion ?>">
+                           value="<?= h($duracion) ?>">
                     <?php mensajeError('duracion', $error) ?>
                 </div>
                 <div class="form-group <?= hasError('genero_id', $error) ?>">
                     <label for="genero_id" class="control-label">Género</label>
-                    <input id="genero_id" type="text" name="genero_id"
-                           class="form-control"
-                           value="<?= $genero_id?>">
+                    <select class="form-control" name="genero_id">
+                        <?php foreach ($generos as $g): ?>
+                            <option value="<?= $g['id'] ?>" <?= selected($g['id'], $genero_id) ?> >
+                                <?= $g['genero'] ?>
+                            </option>
+                        <?php endforeach ?>
+                    </select>
                     <?php mensajeError('genero_id', $error) ?>
                 </div>
                 <input type="submit" value="<?= $accion ?>"
@@ -200,4 +206,27 @@ function mostrarFormulario($valores, $error, $accion)
 function h($cadena)
 {
     return htmlspecialchars($cadena, ENT_QUOTES);
+}
+
+function comprobarId()
+{
+    $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    if ($id === null || $id === false) {
+        throw new ParamException();
+    }
+    return $id;
+}
+
+function comprobarPelicula($pdo, $id)
+{
+    $fila = buscarPelicula($pdo, $id);
+    if ($fila === false) {
+        throw new ParamException();
+    }
+    return $fila;
+}
+
+function selected($a, $b)
+{
+    return $a == $b ? 'selected' : '';
 }
