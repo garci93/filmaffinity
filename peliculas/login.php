@@ -1,3 +1,4 @@
+<?php session_start() ?>
 <!DOCTYPE html>
 <html lang="es" dir="ltr">
     <head>
@@ -22,26 +23,27 @@
             $valores = array_map('trim', $_POST);
             $flt['login'] = comprobarLogin($error);
             $flt['password'] = comprobarPassword($error);
-            comprobarUsuario($valores, $error, $pdo);
+            $usuario = comprobarUsuario($flt, $pdo, $error);
             comprobarErrores($error);
             // Sólo queda loguearse
+            $_SESSION['usuario'] = $usuario['login'];
             header('Location: index.php');
         } catch (EmptyParamException|ValidationException $e) {
             // No hago nada
         } catch (ParamException $e) {
             header('Location: index.php');
         }
-         ?>
+        ?>
         <div class="container">
             <div class="row">
                 <form action="" method="post">
                     <div class="form-group">
                         <label for="login">Usuario:</label>
-                        <input type="text" name="login" value="">
+                        <input class="form-control" type="text" name="login" value="">
                     </div>
                     <div class="form-group">
                         <label for="password">Contraseña:</label>
-                        <input type="password" name="password" value="">
+                        <input class="form-control" type="password" name="password" value="">
                     </div>
                     <button type="submit" class="btn btn-default">Iniciar sesión</button>
                 </form>

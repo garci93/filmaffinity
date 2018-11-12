@@ -23,14 +23,14 @@ CREATE TABLE peliculas
                            ON UPDATE CASCADE
 );
 
-  CREATE TABLE usuarios
-  (
-      id       BIGSERIAL   PRIMARY KEY
-    , login    VARCHAR(50) NOT NULL UNIQUE
-                            CONSTRAINT ck_login_sin_espacios
-                            CHECK (login NOT LIKE '% %')
-    , password VARCHAR(60) NOT NULL
-  )
+CREATE TABLE usuarios
+(
+    id       BIGSERIAL   PRIMARY KEY
+  , login    VARCHAR(50) NOT NULL UNIQUE
+                         CONSTRAINT ck_login_sin_espacios
+                         CHECK (login NOT LIKE '% %')
+  , password VARCHAR(60) NOT NULL
+);
 
 -- INSERT
 
